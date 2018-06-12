@@ -41,6 +41,9 @@ class App extends React.Component {
     this.props.navigation.navigate('PageLogin');
   }
 
+  _pageregister = () => {
+    this.props.navigation.navigate('PageRegister');
+  }
 
   render() {
 
@@ -51,6 +54,7 @@ class App extends React.Component {
       <Button onPress={this._page2} title="Go to page 2"/>
       <Button onPress={this._pagefirebase} title="Go to page firebase"/>
       <Button onPress={this._pagelogin} title="Go to page login"/>
+      <Button onPress={this._pageregister} title="Go to page register"/>
 
       <Text></Text>
 
@@ -59,7 +63,40 @@ class App extends React.Component {
   }
 }
 
+class PageRegister extends React.Component {
+  constructor(props) {
+    super(props);
 
+    this.state = {
+      email:'',
+      password:'',
+    }
+  }
+
+  _register = () => {
+    firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
+    .then( (userData) => {
+
+      console.log(userData);
+      console.log(userData.user.uid);
+    }).catch ( (error) => {
+      console.log(error);
+    })
+  }
+
+  render() {
+    return(
+      <View>
+      <Text>Login Page</Text>
+      <Text>Email</Text>
+      <TextInput value={this.state.email} onChangeText={ (x) => this.setState({email:x}) }/>
+      <Text>Password</Text>
+      <TextInput value={this.state.password} onChangeText= {(x) => this.setState({password:x})}/>
+      <Button onPress={this._register} title="Register"/>
+      </View>
+    )
+  }
+}
 class PageLogin extends React.Component {
   constructor(props) {
     super(props);
@@ -73,10 +110,12 @@ class PageLogin extends React.Component {
   _loginnow = () => {
     firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password)
     .then( (userData) => {
-      console.log(userData.uid);
+      console.log(userData);
+      console.log(userData.user.uid);
     }).catch ( (error) => {
       console.log(error);
     })
+
   }
 
   render() {
@@ -164,6 +203,7 @@ export default StackNavigator({
   Page2 : {screen: Page2,},
   PageFirebase : {screen: PageFirebase,},
   PageLogin : {screen: PageLogin,},
+  PageRegister : {screen: PageRegister,},
 })
 
 
