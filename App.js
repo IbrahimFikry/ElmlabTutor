@@ -76,7 +76,9 @@ class PageRegister extends React.Component {
   _register = () => {
     firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
     .then( (userData) => {
-
+      firebase.database().ref('users/' + userData.user.uid).set({
+          email: this.state.email,
+        })
       console.log(userData);
       console.log(userData.user.uid);
     }).catch ( (error) => {
